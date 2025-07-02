@@ -41,5 +41,29 @@
   y是标量，x是向量,x=[x1,x2,x3,...,xn],
   导数：dy/dx=[dy/dx1,dy/dx2,dy/dx3,...dy/dxn]
   梯度：指向一个值变化最大的那个方向（why?设Δf为梯度，v为方向向量，当v与Δf方向一致时，得到的Δf*v的值是最大的）（机器学习求解的一个核心思想）
-  
 
+  y为标量，x,u,v为向量,
+    y=a:dy/dx=0.T
+    y=au(u为向量)：dy/dx=adu/dx
+    y=sum(x)：1.T
+    ||x||^2:2x.T
+    y=u+v:dy/dx=du/dx+dv/dx
+    y=uv:vdu/dx+udv/dx
+    y=<u,v>:dy/dx=u.Tdv/dx+v.Tdu/dx
+
+  y是列向量，x为标量：
+  dy/dx是一个列向量
+
+  y是一个向量，x为向量：
+  dy/dx为一个矩阵
+    y=a:dy/dx=0;
+    y=x:dy/dx=I;
+    y=Ax:dy/dx=A;
+    y=x.T*A;dy/dx=A.T;
+四、向量链式法则：
+  标量链式法则：
+  向量链式法则：
+  y=f(u),u=g(x)
+  y为标量，x为n维向量，u为标量：dy/dx=dy/du*du/dx--->(1,n)<--(1,)(1,n)
+  y为标量，x为n维向量，u为k维向量：dy/dx=dy/du*du/dx---->(1,n)<--(1,k)(k,n)
+  y为向量，x为n维向量，u为k维向量：dy/dx=dy/du*du/dx--->(m,n)<--(m,k)(k,n)
