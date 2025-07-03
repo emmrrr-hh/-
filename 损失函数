@@ -1,0 +1,13 @@
+L2 LOSS
+  l(y,y')=1/2*(y-y')^2
+预测值距离实际值比较远的时候，梯度非常大
+
+L1 LOSS
+  l(y,y')=|y-y'|
+梯度和预测值距离实际值的距离无关
+0点处不可导；
+
+Huber’s Robust Loss
+  把L1 Loss和L2 Loss结合起来
+
+
