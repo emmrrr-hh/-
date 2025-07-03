@@ -1,3 +1,4 @@
+#读取图片数据集
 from random import shuffle
 
 import torch
