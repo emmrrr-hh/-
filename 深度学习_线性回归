@@ -19,3 +19,7 @@
           y+=torch.normal(0,0.01,y.shape)
           return X,y.reshape((-1,1))
 
+
+
+
+2.线性回归的简洁实现
