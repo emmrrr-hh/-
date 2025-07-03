@@ -1,1 +1,3 @@
+soft__regression1.py为读取图片数据集
 
+soft_regression2.py为从零实现softmax回归
