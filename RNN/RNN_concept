@@ -1,0 +1,58 @@
+循环神经网络RNN:
+考虑到了一个隐状态的概念，如果没有隐状态这个概念，那么就是一个MLP模型
+
+衡量一个语言模型的好坏：
+  可以用平均交叉熵来判断
+  困惑度：
+    exp(平均交叉熵)
+    1表示完美，无穷大是最差情况
+
+
+梯度裁剪：
+  作用：有效的预防梯度爆炸，
+
+
+更多的应用RNNS：
+  文本生成；文本分类；问答、机器翻译,Tag生成
+
+
+总结：
+循环神经网络的输出取决于当下输入和前一时间的隐变量;
+应用到语言模型中，循环神经网络根据当前词预测下一次时刻词1
+通常使用困惑度来衡量语言模型的好坏
+
+
+
+#@save
+def train_epoch_ch8(net, train_iter, loss, updater, device, use_random_iter):
+    """训练网络一个迭代周期（定义见第8章）"""
+    state, timer = None, d2l.Timer()
+    metric = d2l.Accumulator(2)  # 训练损失之和,词元数量
+    for X, Y in train_iter:
+        if state is None or use_random_iter:
+            # 在第一次迭代或使用随机抽样时初始化state
+            state = net.begin_state(batch_size=X.shape[0], device=device)
+        else:
+            if isinstance(net, nn.Module) and not isinstance(state, tuple):
+                # state对于nn.GRU是个张量
+                state.detach_()#注意，这里断开的是state和之前计算的关系，这里求梯度只求到state
+            else:
+                # state对于nn.LSTM或对于我们从零开始实现的模型是个张量
+                for s in state:
+                    s.detach_()#注意，这里断开的是state和之前计算的关系，这里求梯度只求到state
+        y = Y.T.reshape(-1)
+        X, y = X.to(device), y.to(device)
+        y_hat, state = net(X, state)
+        l = loss(y_hat, y.long()).mean()
+        if isinstance(updater, torch.optim.Optimizer):
+            updater.zero_grad()
+            l.backward()
+            grad_clipping(net, 1)
+            updater.step()
+        else:
+            l.backward()
+            grad_clipping(net, 1)
+            # 因为已经调用了mean函数
+            updater(batch_size=1)
+        metric.add(l * y.numel(), y.numel())
+    return math.exp(metric[0] / metric[1]), metric[1] / timer.stop()
